@@ -47,7 +47,7 @@ from project import models
 @app.route('/')
 def index():
     """Searches the database for entries, then displays them."""
-    entries = db.session.query(models.Post)
+    entries = db.session.query(models.post)
     return render_template('index.html', entries=entries)
 
 
@@ -56,7 +56,7 @@ def add_entry():
     """Adds new post to the database."""
     if not session.get('logged_in'):
         abort(401)
-    new_entry = models.Post(request.form['title'], request.form['text'])
+    new_entry = models.post(request.form['title'], request.form['text'])
     db.session.add(new_entry)
     db.session.commit()
     flash('New entry was successfully posted')
@@ -89,7 +89,7 @@ def logout():
 @app.route('/search/', methods=['GET'])
 def search():
     query = request.args.get("query")
-    entries = db.session.query(models.Post)
+    entries = db.session.query(models.post)
     if query:
         return render_template('search.html', entries=entries, query=query)
     return render_template('search.html')
@@ -110,9 +110,9 @@ def delete_entry(post_id):
     result = {'status': 0, 'message': 'Error'}
     try:
         new_id = post_id
-        db.session.query(models.Post).filter_by(id=new_id).delete()
+        db.session.query(models.post).filter_by(id=new_id).delete()
         db.session.commit()
-        result = {'status': 1, 'message': "Post Deleted"}
+        result = {'status': 1, 'message': "post Deleted"}
         flash('The entry was deleted.')
     except Exception as e:
         result = {'status': 0, 'message': repr(e)}
@@ -120,7 +120,7 @@ def delete_entry(post_id):
 
 
 if __name__ == "__main__":
-    #with app.app_context():
-    #    db.create_all()  # This will create all tables defined in models.py
-    #    db.session.commit()
+    with app.app_context():
+        db.create_all()  # This will create all tables defined in models.py
+        db.session.commit()
     app.run()
