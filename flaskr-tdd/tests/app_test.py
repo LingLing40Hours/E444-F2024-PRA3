@@ -1,4 +1,3 @@
-import os
 import pytest
 from pathlib import Path
 from project.app import app, db
@@ -75,6 +74,7 @@ def test_messages(client):
     assert b"&lt;Hello&gt;" in rv.data
     assert b"<strong>HTML</strong> allowed here" in rv.data
 
+
 def test_delete_message(client):
     """Ensure the messages are being deleted"""
     rv = client.get("/delete/1")
@@ -106,7 +106,7 @@ def test_search(client):
     assert rv.status_code == 200
     assert b"This1337" in rv.data
     assert b"That1337" in rv.data
-    
+
     rv = client.get("/search/?query=This1337")
     assert rv.status_code == 200
     assert b"This1337" in rv.data
