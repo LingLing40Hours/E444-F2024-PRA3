@@ -97,6 +97,9 @@ def test_search(client):
 
     rv = client.get("/search/")
     assert rv.status_code == 200
+
+    rv = client.get("/search/?query=Th")
+    assert rv.status_code == 200
     assert b"This1337" in rv.data
     assert b"That1337" in rv.data
     
@@ -107,4 +110,5 @@ def test_search(client):
 
     rv = client.get("/search/?query=duckweed")
     assert rv.status_code == 200
-    assert b"No entries yet. Add some!" in rv.data
+    assert b"This1337" not in rv.data
+    assert b"That1337" not in rv.data
